@@ -1,10 +1,6 @@
 package com.vistrav.flow;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Flow<T> {
 
@@ -69,8 +65,7 @@ public class Flow<T> {
             if (!foundAny) {
                 foundAny = true;
                 result = value;
-            }
-            else {
+            } else {
                 result = accumulator.apply(result, value);
             }
         }
@@ -78,14 +73,9 @@ public class Flow<T> {
     }
 
     public boolean anyMatch(Predicate<? super T> predicate) {
-        while (iterator.hasNext()) {
-            T next = iterator.next();
-            if (predicate.test(next)) {
-                return true;
-            }
-        }
-        return false;
+        return firstMatch(predicate) != null;
     }
+
 
     public List<T> toList() {
         final List<T> result = new ArrayList<T>();
@@ -93,6 +83,16 @@ public class Flow<T> {
             result.add(iterator.next());
         }
         return result;
+    }
+
+    public T firstMatch(Predicate<? super T> predicate) {
+        while (iterator.hasNext()) {
+            T next = iterator.next();
+            if (predicate.test(next)) {
+                return next;
+            }
+        }
+        return null;
     }
 
 }
