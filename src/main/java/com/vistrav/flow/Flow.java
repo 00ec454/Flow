@@ -95,4 +95,12 @@ public class Flow<T> {
         return null;
     }
 
+    public <R> Flow<R> map(final Function<? super T, ? extends R> mapper) {
+        List<R> anotherResult = new ArrayList<>();
+        while (iterator.hasNext()) {
+            anotherResult.add(mapper.apply(iterator.next()));
+        }
+        return Flow.<R>of(anotherResult);
+    }
+
 }
